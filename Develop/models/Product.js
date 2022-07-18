@@ -20,7 +20,7 @@ Product.init(
 
     },
     // name` is a string, no null values
-    name: {
+    product_name: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -44,7 +44,7 @@ Product.init(
     category_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Category',
+        model: Category,
         key: 'id',
       }
     }

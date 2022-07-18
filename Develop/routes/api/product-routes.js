@@ -4,15 +4,46 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
+router.get('/', async (req, res) => {
+  try {
+    // find all products
+    const productData = await Product.findAll({
+      // be sure to include its associated Category and Tag data
+      include: [{ model: Category, Tag}]
+    })
+
+    if (!productData) {
+      res.status(400).json(`Can't find what you're looking for!`)
+      return;
+    }
+
+    res.status(200).json(productData)
+
+  } catch (err) {
+    console.log(`🚨🚨🚨 SOMETHING WENT WRONG 🚨🚨🚨`, err)
+  }
 });
 
 // get one product
-router.get('/:id', (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
+router.get('/:id', async (req, res) => {
+  try {
+    // find a single product by its `id`
+    const productData = await Product.findByPk(req.params.id, {
+      // be sure to include its associated Category and Tag data
+      include: [{ model: Category, Tag}]
+    })
+    
+    if (!productData) {
+      res.status(400).json(`Can't find what you're looking for!`)
+      return;
+    }
+
+    res.status(200).json(productData)
+    
+  } catch (err) {
+    console.log(`🚨🚨🚨 SOMETHING WENT WRONG 🚨🚨🚨`, err)
+
+  }
 });
 
 // create new product
@@ -89,8 +120,23 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
+router.delete('/:id', async (req, res) => {
+  try {
+    // delete one product by its `id` value
+    const productData = Product.destroy({
+      where: req.params.id
+    })
+
+    if (!productData) {
+      res.status(400).json(`Can't find what you're looking for!`)
+      return;
+    }
+
+    res.status(200).json(productData)
+    
+  } catch (err) {
+    console.log(`🚨🚨🚨 SOMETHING WENT WRONG 🚨🚨🚨`, err)
+  }
 });
 
 module.exports = router;
