@@ -25,6 +25,7 @@ router.get('/:id', async (req, res) => {
     })
     if (!categoriesData) {
       res.status(404).json({ message: `Can't find what you're looking for!`})
+      return;
     }
     // be sure to include its associated Products
     res.status(200).json(categoriesData);
@@ -48,7 +49,9 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const categoriesData = await Category.update(req.body, {
-      where: req.params.id
+      where: {
+        id: req.params.id
+      } 
     })
 
     if (!categoriesData) {
@@ -66,7 +69,9 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const categoriesData = Category.destroy({
-      where: req.params.id
+      where: {
+        id: req.params.id
+      } 
     })
     if (!categoriesData) {
       res.status(400).json(`Can't find what you're looking for!`)
